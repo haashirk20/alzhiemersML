@@ -1,10 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My Homepage</title>
+    <title>Alzheimer's Prediction</title>
 </head>
 <body>
-    <h1>Welcome to My Homepage</h1>
-    <p>This is a basic homepage.</p>
+    <h1>Alzheimer's Prediction</h1>
+    <form action="http://localhost:5000/predict" method="POST">
+        <label for="age">Age:</label>
+        <input type="range" id="age" name="age" min="1" max="100">
+        <label for="bmi">BMI:</label>
+        <input type="range" id="bmi" name="bmi" min="15" max="40">
+        <label for="smoking">Smoking:</label>
+        <input type="range" id="smoking" name="smoking" min="0" max="1">
+        <label for="alcoholConsumption">Alcohol Consumption:</label>
+        <input type="range" id="alcoholConsumption" name="alcoholConsumption" min="0" max="20">
+        <label for="physicalActivity">Physical Activity:</label>
+        <input type="range" id="physicalActivity" name="physicalActivity" min="0" max="10">
+        <label for="dietQuality">Diet Quality:</label>
+        <input type="range" id="dietQuality" name="dietQuality" min="0" max="10">
+        <label for="sleepQuality">Sleep Quality:</label>
+        <input type="range" id="sleepQuality" name="sleepQuality" min="4" max="10">
+        <label for="familyHistoryAlzheimers">Family History of Alzheimer's:</label>
+        <input type="range" id="familyHistoryAlzheimers" name="familyHistoryAlzheimers" min="0" max="1">
+        <label for="cardiovascularDisease">Cardiovascular Disease:</label>
+        <input type="range" id="cardiovascularDisease" name="cardiovascularDisease" min="0" max="1">
+        <label for="hypertension">Hypertension:</label>
+        <input type="range" id="hypertension" name="hypertension" min="0" max="1">
+        <input type="submit" value="Submit">
+      </form>
 </body>
 </html>
