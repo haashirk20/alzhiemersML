@@ -34,7 +34,7 @@ def convert_to_array(gender, educationLevel, ethnicity):
     return gender_array, education_array, ethnicity_array
 
 # Streamlit app
-st.title("Unnamed Function Calculator")
+st.title("How high of a chance do you have of getting Alzheimer's?")
 
 
 # ['Age', 'BMI', 'Smoking', 'AlcoholConsumption', 'PhysicalActivity',
@@ -48,35 +48,47 @@ st.title("Unnamed Function Calculator")
 #        'Ethnicity_Asian', 'Ethnicity_Black', 'Ethnicity_Other',
 #        'Ethnicity_White']
 
-# Number input fields
-age = st.number_input("Age", 0, 100, 0)
-BMI = st.number_input("BMI", 0, 100, 0)
+# columns
+col1, col2 = st.columns(2)
+butcol1, butcol2 = st.columns(2)
 
-# select boxes
-gender = st.selectbox("Gender", ("Male", "Female"))
-educationLevel = st.selectbox("Education Level", ("No Degree", "High School", "Bachelor's", "Higher"))
-ethnicity = st.selectbox("ethnicity", ("White", "Black", "Asian", "Other"))
+with col1:
 
-# sliders
-alcoholConsumption = st.slider("Alcohol Consumption", 0, 10, 0)
-physicalActivity = st.slider("Physical Activity", 0, 10, 0)
-dietQuality = st.slider("Diet Quality", 0, 10, 0)
-sleepQuality = st.slider("Sleep Quality", 0, 10, 0)
-# Radio buttons
-smoking = st.radio("Smoking", ["Yes", "No"])
-familyHistoryAlzheimers = st.radio("Family History Alzheimers", ["Yes", "No"])
-cardiovascularDisease = st.radio("Cardiovascular Disease", ["Yes", "No"])
-diabetes = st.radio("Diabetes", ["Yes", "No"])
-depression = st.radio("Depression", ["Yes", "No"])
-headInjury = st.radio("Head Injury", ["Yes", "No"])
-hypertension = st.radio("Hypertension", ["Yes", "No"])
-memoryComplaints = st.radio("Memory Complaints", ["Yes", "No"])
-behavioralProblems = st.radio("Behavioral Problems", ["Yes", "No"])
-confusion = st.radio("Confusion", ["Yes", "No"])
-disorientation = st.radio("Disorientation", ["Yes", "No"])
-personalityChanges = st.radio("Personality Changes", ["Yes", "No"])
-difficultyCompletingTasks = st.radio("Difficulty Completing Tasks", ["Yes", "No"])
-forgetfulness = st.radio("Forgetfulness", ["Yes", "No"])
+    # Number input fields
+    age = st.number_input("How old are you?", 0, 100, 0)
+    BMI = st.number_input("What is your BMI?", 0, 100, 0)
+
+    # select boxes
+    gender = st.selectbox("What is your Gender?", ("Male", "Female"))
+    educationLevel = st.selectbox("What is your highest level of Education?", ("No Degree", "High School", "Bachelor's", "Higher"))
+    ethnicity = st.selectbox("What is your ethnicity?", ("White", "Black", "Asian", "Other"))
+
+with col2:
+
+    # sliders
+    st.write("On a scale of 0 to 10, how would you rate the following?")
+    alcoholConsumption = st.slider("Alcohol Consumption", 0, 10, 0)
+    physicalActivity = st.slider("Physical Activity", 0, 10, 0)
+    dietQuality = st.slider("Diet Quality", 0, 10, 0)
+    sleepQuality = st.slider("Sleep Quality", 0, 10, 0)
+
+with butcol1:
+    # Radio buttons
+    smoking = st.radio("Do you smoke?", ["Yes", "No"])
+    familyHistoryAlzheimers = st.radio("Do you have a family history of Alzheimers?", ["Yes", "No"])
+    cardiovascularDisease = st.radio("Do you have a Cardiovascular Disease?", ["Yes", "No"])
+    diabetes = st.radio("Do you have Diabetes?", ["Yes", "No"])
+    depression = st.radio("Have you been diagnosed with depression?", ["Yes", "No"])
+    headInjury = st.radio("Have you ever had a serious head injury?", ["Yes", "No"])
+    hypertension = st.radio("Do you have high blood pressure?", ["Yes", "No"])
+with butcol2:
+    memoryComplaints = st.radio("Do you have poor memory?", ["Yes", "No"])
+    behavioralProblems = st.radio("Do you have a history of behavourial problems?", ["Yes", "No"])
+    confusion = st.radio("Do you find yourself confused throughout the day?", ["Yes", "No"])
+    disorientation = st.radio("Do you experience disorientation?", ["Yes", "No"])
+    personalityChanges = st.radio("Do you have frequent personality changes?", ["Yes", "No"])
+    difficultyCompletingTasks = st.radio("Would you say you have difficulty completing daily tasks?", ["Yes", "No"])
+    forgetfulness = st.radio("Would you consider yourself forgetful?", ["Yes", "No"])
 
 # convert radio buttons to 1 or 0
 smoking = 1 if smoking == "Yes" else 0
@@ -95,15 +107,15 @@ difficultyCompletingTasks = 1 if difficultyCompletingTasks == "Yes" else 0
 forgetfulness = 1 if forgetfulness == "Yes" else 0
 
 if st.button("Calculate"):
-    #ml = Logistic_ML()
+    ml = Logistic_ML()
     # add all values to np array and convert to float
     datapoint = np.array([age, BMI, smoking, alcoholConsumption, physicalActivity, dietQuality, sleepQuality, familyHistoryAlzheimers, cardiovascularDisease, diabetes, depression, headInjury, hypertension, memoryComplaints, behavioralProblems, confusion, disorientation, personalityChanges, difficultyCompletingTasks, forgetfulness])
     gender_array, education_array, ethnicity_array = convert_to_array(gender, educationLevel, ethnicity)
     gender_array = np.array(gender_array)
     education_array = np.array(education_array)
     ethnicity_array = np.array(ethnicity_array)
-    print(gender_array, education_array, ethnicity_array)
+    #print(gender_array, education_array, ethnicity_array)
     datapoint = np.concat((datapoint, gender_array, education_array, ethnicity_array))
-    print(datapoint)
-    #result = ml.predict(datapoint)
-    #st.success(f"Result: {result}")
+    #print(datapoint)
+    result = ml.predict(datapoint.reshape(1, -1))
+    st.success(f"Result: {result}")
