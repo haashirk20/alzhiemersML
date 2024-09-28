@@ -133,5 +133,6 @@ if st.button("Calculate"):
     datapoint = np.concat((datapoint, gender_array, education_array, ethnicity_array))
     #print(datapoint)
     result = ml.predict(datapoint.reshape(1, -1))
-    diagnosis = result[0] * 100
-    st.error(f"You have a {diagnosis}% chance of getting Alzheimer's at some point throughout your life.")
+    print(result[0])
+    diagnosis = round(result[0][0] * 100,2)
+    st.success(f"You have a {diagnosis}% chance of getting Alzheimer's at some point throughout your life.")
