@@ -2,6 +2,7 @@ import streamlit as st
 import numpy as np
 from ML import Logistic_ML
 
+
 def convert_to_array(gender, educationLevel, ethnicity):
     gender_array = []
 
@@ -34,7 +35,16 @@ def convert_to_array(gender, educationLevel, ethnicity):
     return gender_array, education_array, ethnicity_array
 
 # Streamlit app
-st.title("How high of a chance do you have of getting Alzheimer's?")
+st.set_page_config(layout="wide", page_title="Alzheimer's Disease Prediction", page_icon=":brain:")
+hide_default_format = """
+       <style>
+       #MainMenu {visibility: hidden; }
+       footer {visibility: hidden;}
+       </style>
+       """
+st.markdown(hide_default_format, unsafe_allow_html=True)
+
+st.title("Alzheimer's Disease Prediction using Logistic Regression")
 
 
 # ['Age', 'BMI', 'Smoking', 'AlcoholConsumption', 'PhysicalActivity',
@@ -48,9 +58,14 @@ st.title("How high of a chance do you have of getting Alzheimer's?")
 #        'Ethnicity_Asian', 'Ethnicity_Black', 'Ethnicity_Other',
 #        'Ethnicity_White']
 
+st.subheader("Please fill out the following information to get your prediction. The more accurate the information, the more accurate the prediction will be.")
+st.subheader("Please note that this is not a diagnosis, but a prediction based on the information you provide.")
+
 # columns
 col1, col2 = st.columns(2)
 butcol1, butcol2 = st.columns(2)
+
+
 
 with col1:
 
@@ -74,21 +89,21 @@ with col2:
 
 with butcol1:
     # Radio buttons
-    smoking = st.radio("Do you smoke?", ["Yes", "No"])
-    familyHistoryAlzheimers = st.radio("Do you have a family history of Alzheimers?", ["Yes", "No"])
-    cardiovascularDisease = st.radio("Do you have a Cardiovascular Disease?", ["Yes", "No"])
-    diabetes = st.radio("Do you have Diabetes?", ["Yes", "No"])
-    depression = st.radio("Have you been diagnosed with depression?", ["Yes", "No"])
-    headInjury = st.radio("Have you ever had a serious head injury?", ["Yes", "No"])
-    hypertension = st.radio("Do you have high blood pressure?", ["Yes", "No"])
+    smoking = st.radio("Do you smoke?", ["Yes", "No"], horizontal = True)
+    familyHistoryAlzheimers = st.radio("Do you have a family history of Alzheimers?", ["Yes", "No"], horizontal = True)
+    cardiovascularDisease = st.radio("Do you have a Cardiovascular Disease?", ["Yes", "No"], horizontal = True)
+    diabetes = st.radio("Do you have Diabetes?", ["Yes", "No"], horizontal = True)
+    depression = st.radio("Have you been diagnosed with depression?", ["Yes", "No"], horizontal = True)
+    headInjury = st.radio("Have you ever had a serious head injury?", ["Yes", "No"], horizontal = True)
+    hypertension = st.radio("Do you have high blood pressure?", ["Yes", "No"], horizontal = True)
 with butcol2:
-    memoryComplaints = st.radio("Do you have poor memory?", ["Yes", "No"])
-    behavioralProblems = st.radio("Do you have a history of behavourial problems?", ["Yes", "No"])
-    confusion = st.radio("Do you find yourself confused throughout the day?", ["Yes", "No"])
-    disorientation = st.radio("Do you experience disorientation?", ["Yes", "No"])
-    personalityChanges = st.radio("Do you have frequent personality changes?", ["Yes", "No"])
-    difficultyCompletingTasks = st.radio("Would you say you have difficulty completing daily tasks?", ["Yes", "No"])
-    forgetfulness = st.radio("Would you consider yourself forgetful?", ["Yes", "No"])
+    memoryComplaints = st.radio("Do you have poor memory?", ["Yes", "No"], horizontal = True)
+    behavioralProblems = st.radio("Do you have a history of behavourial problems?", ["Yes", "No"], horizontal = True)
+    confusion = st.radio("Do you find yourself confused throughout the day?", ["Yes", "No"], horizontal = True)
+    disorientation = st.radio("Do you experience disorientation?", ["Yes", "No"], horizontal = True)
+    personalityChanges = st.radio("Do you have frequent personality changes?", ["Yes", "No"], horizontal = True)
+    difficultyCompletingTasks = st.radio("Would you say you have difficulty completing daily tasks?", ["Yes", "No"], horizontal = True)
+    forgetfulness = st.radio("Would you consider yourself to be forgetful?", ["Yes", "No"], horizontal = True)
 
 # convert radio buttons to 1 or 0
 smoking = 1 if smoking == "Yes" else 0
@@ -118,4 +133,5 @@ if st.button("Calculate"):
     datapoint = np.concat((datapoint, gender_array, education_array, ethnicity_array))
     #print(datapoint)
     result = ml.predict(datapoint.reshape(1, -1))
-    st.success(f"Result: {result}")
+    diagnosis = result[0] * 100
+    st.error(f"You have a {diagnosis}% chance of getting Alzheimer's at some point throughout your life.")
