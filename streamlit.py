@@ -134,5 +134,5 @@ if st.button("Calculate"):
     #print(datapoint)
     result = ml.predict(datapoint.reshape(1, -1))
     print(result[0])
-    diagnosis = round(result[0][0] * 100,2)
+    diagnosis = round(result[0][1] * 100,2)
     st.success(f"You have a {diagnosis}% chance of getting Alzheimer's at some point throughout your life.")
