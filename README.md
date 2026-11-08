@@ -1,68 +1,67 @@
-# Alzheimer's Risk Predictor
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/readme/hero-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="assets/readme/hero-light.svg">
+    <img src="assets/readme/hero-dark.svg" width="880" alt="Alzheimer's Risk Predictor: 2,149 patients, 23 questions, 30 features, 69.8% test accuracy. Student ML project, not a medical tool.">
+  </picture>
+</p>
 
-A Streamlit app that estimates the probability of an Alzheimer's diagnosis from lifestyle, medical history and symptom questions, using a logistic regression model trained on a Kaggle dataset of 2,149 patients.
+<p align="center">
+  <strong>Estimates the probability of an Alzheimer's diagnosis from 23 questions anyone can answer.</strong><br>
+  <strong>69.8% test accuracy &middot; 64.2% majority baseline &middot; 2,149 patients</strong><br>
+  <sub>Logistic regression in scikit-learn, served with Streamlit. Data: Kaggle Alzheimer's Disease Dataset (2024). <a href="#results">Details</a>.</sub>
+</p>
 
-![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)
-![scikit-learn](https://img.shields.io/badge/scikit--learn-1.5-F7931E?logo=scikitlearn&logoColor=white)
-![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?logo=streamlit&logoColor=white)
-![pandas](https://img.shields.io/badge/pandas-150458?logo=pandas&logoColor=white)
-
-## Demo
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-111111?style=flat-square&logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/scikit--learn-1.5-111111?style=flat-square&logo=scikitlearn&logoColor=white" alt="scikit-learn 1.5">
+  <img src="https://img.shields.io/badge/Streamlit-111111?style=flat-square&logo=streamlit&logoColor=white" alt="Streamlit">
+  <img src="https://img.shields.io/badge/pandas-111111?style=flat-square&logo=pandas&logoColor=white" alt="pandas">
+</p>
 
 <!-- TODO: demo link or video -->
 
-## Overview
+---
 
-The app asks 23 questions a person can answer without a doctor: age, BMI, sex, education, ethnicity, 0 to 10 ratings for alcohol use, physical activity, diet and sleep, and yes/no questions about family history, conditions like diabetes and hypertension, and symptoms like memory complaints and confusion. It encodes the answers the same way as the training data and shows the model's predicted probability of a positive diagnosis. This is a student ML project, not a medical tool, and the app says so.
+The app asks 23 questions a person can answer without a doctor, encodes the answers the same way as the training data, and shows the model's predicted probability of a positive diagnosis. It is a student ML project, not a medical tool, and the app says so.
 
-## Key features
+## How it works
 
-- A questionnaire built with Streamlit inputs (number fields, select boxes, sliders and radio buttons) in a two-column layout with a custom theme.
-- One-hot encoding of sex, education level and ethnicity that matches the training pipeline, so app inputs line up with the model's 30 features.
-- A logistic regression model with elastic-net regularisation, trained when you click Calculate.
-- A grid search (`tune_model` in `ML.py`) over solver penalty, `C` and `l1_ratio` with 3-fold cross-validation.
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/readme/how-it-works-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="assets/readme/how-it-works-light.svg">
+    <img src="assets/readme/how-it-works-dark.svg" width="880" alt="How it works: Kaggle data (2,149 rows), clean_data (drop clinical tests, one-hot encode), train_model (elastic-net logistic regression), questionnaire (23 answers become 30 features), predict_proba (probability of a diagnosis).">
+  </picture>
+</p>
 
-## Tech stack
+`ML.py` holds the data pipeline and the model. `clean_data` maps sex, education and ethnicity to readable labels before `pd.get_dummies`, so encoded columns such as `Ethnicity_Asian` are easy to check against the app's feature order. `train_model` fits a logistic regression with elastic-net regularisation (`saga` solver, `l1_ratio=0.5`), which mixes L1 and L2 penalties; the L1 part can push weak features to zero.
 
-| Area | Tools |
-|---|---|
-| Model | scikit-learn (`LogisticRegression`, `GridSearchCV`) |
-| Data | pandas, NumPy |
-| App | Streamlit |
-| Data source | [Alzheimer's Disease Dataset](https://www.kaggle.com/dsv/8668279), Rabie El Kharoua, Kaggle (2024) |
+`streamlit.py` is the questionnaire: number fields, select boxes, sliders and radio buttons in a two-column layout with a custom theme. It one-hot encodes the answers into the same 30 features, and `homepage.py` is the Streamlit entry point. `tune_model` in `ML.py` runs a grid search over penalty, `C` and `l1_ratio` with 3-fold cross-validation.
 
-## Architecture
+## What the model sees
 
-```mermaid
-flowchart LR
-    csv[("alzheimers_disease_data.csv")] --> clean["ML.clean_data<br/>one-hot encode, drop clinical columns"]
-    clean --> train["ML.train_model<br/>elastic-net logistic regression"]
-    ui["streamlit.py<br/>questionnaire"] -- "30-feature vector" --> model["Logistic_ML.predict<br/>predict_proba"]
-    train --> model
-    model --> ui
-    home["homepage.py<br/>st.navigation entry"] --> ui
-```
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/readme/inputs-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="assets/readme/inputs-light.svg">
+    <img src="assets/readme/inputs-dark.svg" width="880" alt="Kept: 23 self-reported questions covering demographics, lifestyle ratings, medical history and symptoms. Dropped: blood pressure, cholesterol panel, MMSE score, functional assessment and ADL score.">
+  </picture>
+</p>
 
-`ML.py` holds the data pipeline and model. `streamlit.py` is the questionnaire, and `homepage.py` is the Streamlit entry point.
-
-## Technical highlights
-
-- `clean_data` drops the dataset's clinical measurements: blood pressure, the cholesterol panel, MMSE score, functional assessment and ADL score. A person filling in a web form usually doesn't know these values, so the model only uses inputs people can answer themselves.
-- Elastic-net regularisation (`l1_ratio=0.5`, `saga` solver) mixes L1 and L2 penalties. The L1 part can push weak features to zero.
-- Categorical columns are mapped to readable labels before `pd.get_dummies`, so the encoded column names (for example `Ethnicity_Asian`) make the feature order easy to check against the app.
+The dataset includes clinical measurements: blood pressure, a cholesterol panel, the MMSE score, a functional assessment and an ADL score. `clean_data` drops them, because a person filling in a web form usually doesn't know these values. What remains is age, BMI, sex, education and ethnicity; 0 to 10 ratings for alcohol use, physical activity, diet and sleep; and yes/no questions about family history, conditions such as diabetes and hypertension, and symptoms such as memory complaints and confusion.
 
 ## Results
 
-Running `train_model` with its fixed split (80/20, `random_state=16`) on the 2,149 rows gives these test-set numbers (430 patients, 154 with a diagnosis):
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/readme/results-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="assets/readme/results-light.svg">
+    <img src="assets/readme/results-dark.svg" width="880" alt="Accuracy on 430 test patients: model 69.8%, majority-class baseline 64.2%. Precision 0.62, recall 0.41 for the diagnosed class. Confusion matrix: 237 true negatives, 39 false positives, 91 false negatives, 63 true positives.">
+  </picture>
+</p>
 
-| Metric | Value |
-|---|---|
-| Accuracy | 69.8% |
-| Majority-class baseline | 64.2% |
-| Precision, diagnosed class | 0.62 |
-| Recall, diagnosed class | 0.41 |
-
-The model beats the baseline but misses most positive cases.
+These numbers come from running `train_model` with its fixed split (80/20, `random_state=16`) on all 2,149 rows. The test set has 430 patients, 154 of them with a diagnosis. The model beats always predicting "no diagnosis" by 5.6 points, but it misses 91 of the 154 diagnosed patients, a recall of 0.41.
 
 ## Getting started
 
