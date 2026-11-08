@@ -13,10 +13,10 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Python-111111?style=flat-square&logo=python&logoColor=white" alt="Python">
-  <img src="https://img.shields.io/badge/scikit--learn-1.5-111111?style=flat-square&logo=scikitlearn&logoColor=white" alt="scikit-learn 1.5">
-  <img src="https://img.shields.io/badge/Streamlit-111111?style=flat-square&logo=streamlit&logoColor=white" alt="Streamlit">
-  <img src="https://img.shields.io/badge/pandas-111111?style=flat-square&logo=pandas&logoColor=white" alt="pandas">
+  <img src="https://img.shields.io/badge/Python-386641?style=flat-square&logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/scikit--learn-1.5-386641?style=flat-square&logo=scikitlearn&logoColor=white" alt="scikit-learn 1.5">
+  <img src="https://img.shields.io/badge/Streamlit-386641?style=flat-square&logo=streamlit&logoColor=white" alt="Streamlit">
+  <img src="https://img.shields.io/badge/pandas-386641?style=flat-square&logo=pandas&logoColor=white" alt="pandas">
 </p>
 
 <!-- TODO: demo link or video -->
